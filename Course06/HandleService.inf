@@ -1,0 +1,37 @@
+## @file
+#  Course06-Handle Services .inf source code
+#
+#******************************************************************************
+#* Copyright (c) 2024, Insyde Software Corporation. All Rights Reserved.
+#*
+#* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+#* transmit, broadcast, present, recite, release, license or otherwise exploit
+#* any part of this publication in any form, by any means, without the prior
+#* written permission of Insyde Software Corporation.
+#*
+#******************************************************************************
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = HandleService
+  FILE_GUID                      = 675f217c-2ac2-41f3-bd85-3fd6bd2f2d07
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  HandleService.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  UefiLib
+  BaseLib
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  HandleParsingLib
+  ShellLib
+  ShellCommandLib
+
