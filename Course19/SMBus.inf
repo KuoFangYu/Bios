@@ -1,0 +1,37 @@
+## @file
+#  Course2-07 SmBus .inf source code
+#
+#******************************************************************************
+#* Copyright (c) 2024, Insyde Software Corporation. All Rights Reserved.
+#*
+#* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+#* transmit, broadcast, present, recite, release, license or otherwise exploit
+#* any part of this publication in any form, by any means, without the prior
+#* written permission of Insyde Software Corporation.
+#*
+#******************************************************************************
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SMBus
+  FILE_GUID                      = 23a9c0c2-b44e-43c1-8886-1f6a00b24e26
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 0.5
+  ENTRY_POINT                    = UefiMain
+
+
+[Sources]
+  SMBus.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  BaseLib
+  UefiLib
+
+[Protocols]
+  gEfiSmbusHcProtocolGuid
