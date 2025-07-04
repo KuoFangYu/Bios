@@ -1,0 +1,42 @@
+## @file
+#  Course12 Peim1 .inf source code
+#
+#******************************************************************************
+#* Copyright (c) 2024, Insyde Software Corporation. All Rights Reserved.
+#*
+#* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+#* transmit, broadcast, present, recite, release, license or otherwise exploit
+#* any part of this publication in any form, by any means, without the prior
+#* written permission of Insyde Software Corporation.
+#*
+#******************************************************************************
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = Peim1
+  FILE_GUID                      = 0a7cc08c-6895-4cb1-906c-3e2c355cc7e8
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = Peim1EntryPoint
+
+[Sources]
+  Peim1.c
+  Peim1.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  BaseLib
+  PeiServicesLib
+  PeimEntryPoint
+  DebugLib
+
+[Ppis]
+  gPeim1PpiGuid
+  gEfiPeiReadOnlyVariable2PpiGuid
+  
+[Depex]
+  gEfiPeiMemoryDiscoveredPpiGuid
+
