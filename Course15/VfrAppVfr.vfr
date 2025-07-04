@@ -1,0 +1,529 @@
+/** @file
+
+;******************************************************************************
+;* Copyright (c) 2015, Insyde Software Corp. All Rights Reserved.
+;*
+;* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+;* transmit, broadcast, present, recite, release, license or otherwise exploit
+;* any part of this publication in any form, by any means, without the prior
+;* written permission of Insyde Software Corporation.
+;*
+;******************************************************************************
+*/
+
+//;******************************************************************************
+// change at line 20-23 and 464-523
+//;******************************************************************************
+
+#include "VfrAppNVDataStruc.h"
+
+//
+// NTC
+//
+#define VFR_NTC_HW                                                                0x1009
+
+#define VFR_APP_FORM_ROOT                                                         0x0001
+#define VFR_APP_FORM_FB_FUNC_VFR_REFRESH_INTERVAL                                 0x0002
+#define VFR_APP_FORM_NUMERIC_OPCODE                                               0x1002
+#define VFR_APP_FORM_ONE_OF_OPCODE                                                0x1003
+#define VFR_APP_FORM_STRING_OPCODE                                                0x1004
+#define VFR_APP_FORM_PASSWORD_OPCODE                                              0x1005
+#define VFR_APP_FORM_ORDERED_LIST_OPCODE                                          0x1006
+#define VFR_APP_FORM_TIME_OPCODE                                                  0x1007
+
+#define VFR_APP_FORM_CHECKBOX_OPCODE                                              0x1008
+#define VFR_APP_FORM_SETUP_PAGE_PANEL                                             0x2000
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_NO_ITEM_PAGE                                0x2001
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_NO_SELECTABLE_ITEM_IN_ONE_PAGE              0x2002
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_NO_SELECTABLE_ITEM_IN_THREE_PAGE            0x2003
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_ONE_SELECTABLE_ITEM_IN_ONE_PAGE             0x2004
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_ONE_SELECTABLE_ITEM_IN_ONE_THIRD_PAGE       0x2005
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_ONE_SELECTABLE_ITEM_IN_THREE_THIRD_PAGE     0x2006
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_TWO_SELECTABLE_ITEM_IN_ONE_PAGE             0x2007
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_TWO_SELECTABLE_ITEM_IN_ONE_THIRD_PAGE       0x2008
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_TWO_SELECTABLE_ITEM_IN_ONE_TWO_THIRD_PAGE   0x2009
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_TWO_SELECTABLE_ITEM_IN_ONE_THREE_THIRD_PAGE 0x200A
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_NO_SELECTABLE_MULTI_LINE_ITEM               0x200B
+#define VFR_APP_FORM_SETUP_PAGE_PANEL_THREE_SELECTABLE_MULTI_LINE_ITEM            0x200C
+#define VFR_APP_FORM_HELP_TEXT_PANEL                                              0x3000
+#define VFR_APP_FORM_HOT_KEY_PANEL                                                0x4000
+
+formset
+  guid      = VFR_APP_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_FORM_SET_TITLE),
+  help      = STRING_TOKEN(STR_FORM_SET_TITLE_HELP),
+  classguid = EFI_HII_PLATFORM_SETUP_FORMSET_GUID,
+
+  varstore VFR_APP_CONFIGURATION,
+    varid = CONFIGURATION_VARSTORE_ID,
+    name  = VfrAppVar,
+    guid  = VFR_APP_FORMSET_GUID;
+
+  form
+    formid = VFR_APP_FORM_ROOT,
+    title  = STRING_TOKEN(STR_FORM1_TITLE);
+
+    //
+    // Panel test
+    //
+    subtitle
+      text = STRING_TOKEN(STR_SUBTITLE_TEXT_PANEL);
+
+    goto VFR_APP_FORM_SETUP_PAGE_PANEL,
+      prompt = STRING_TOKEN(STR_FORM_SETUP_PAGE_PANEL_TITLE),
+      help   = STRING_TOKEN(STR_FORM_SETUP_PAGE_PANEL_HELP);
+
+    goto VFR_APP_FORM_HELP_TEXT_PANEL,
+      prompt = STRING_TOKEN(STR_FORM_HELP_PANEL_TITLE),
+      help   = STRING_TOKEN(STR_FORM_HELP_PANEL_HELP);
+
+    goto VFR_APP_FORM_HOT_KEY_PANEL,
+      prompt = STRING_TOKEN(STR_FORM_HOT_KEY_PANEL_TITLE),
+      help   = STRING_TOKEN(STR_FORM_HOT_KEY_PANEL_HELP);
+
+    subtitle
+      text = STRING_TOKEN(STR_EMPTY_TEXT);
+
+    //
+    // Question dialog test
+    //
+    subtitle
+      text = STRING_TOKEN(STR_SUBTITLE_TEXT_QUESTION_DIALOG);
+
+    goto VFR_APP_FORM_NUMERIC_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_NUMERIC_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_NUMERIC_OPCODE_HELP);
+
+    goto VFR_APP_FORM_ONE_OF_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_ONE_OF_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_ONE_OF_OPCODE_HELP);
+
+    goto VFR_APP_FORM_STRING_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_STRING_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_STRING_OPCODE_HELP);
+
+    goto VFR_APP_FORM_PASSWORD_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_PASSWORD_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_PASSWORD_OPCODE_HELP);
+
+    goto VFR_APP_FORM_ORDERED_LIST_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_ORDERED_LIST_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_ORDERED_LIST_OPCODE_HELP);
+
+    goto VFR_APP_FORM_TIME_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_TIME_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_TIME_OPCODE_HELP);
+
+    goto VFR_APP_FORM_CHECKBOX_OPCODE,
+      prompt = STRING_TOKEN(STR_FORM_CHECKBOX_OPCODE_TITLE),
+      help   = STRING_TOKEN(STR_FORM_CHECKBOX_OPCODE_HELP);
+
+    subtitle
+      text = STRING_TOKEN(STR_EMPTY_TEXT);
+
+    //
+    // Form Browser functionality test
+    //
+    subtitle
+      text = STRING_TOKEN(STR_FB_FUNC_TEST);
+
+    goto VFR_APP_FORM_FB_FUNC_VFR_REFRESH_INTERVAL,
+      prompt = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL),
+      help   = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_HELP);
+
+    subtitle
+      text = STRING_TOKEN(STR_EMPTY_TEXT);
+
+    checkbox
+      varid   = VfrAppVar.TestH2ODialog,
+      prompt  = STRING_TOKEN(STR_TEST_H2O_DIALOG_PROMPT),
+      help    = STRING_TOKEN(STR_TEST_H2O_DIALOG_HELP),
+      flags   = 0,
+      default = FALSE,
+    endcheckbox;
+
+    //
+    // NTC
+    //
+    subtitle
+      text = STRING_TOKEN(STR_NTC_HW);
+    
+    goto VFR_NTC_HW,
+      prompt = STRING_TOKEN(STR_NTC_HW),
+      help   = STRING_TOKEN(STR_NTC_HW_HELP);
+
+    subtitle
+      text = STRING_TOKEN(STR_EMPTY_TEXT);
+
+
+#if FeaturePcdGet(PcdH2OFormBrowserSupported)
+    oneof
+      varid       = VfrAppVar.ActiveDisplayEngine,
+      prompt      = STRING_TOKEN(STR_DISPLAY_ENGINE_CONTROL_PROMPT),
+      help        = STRING_TOKEN(STR_DISPLAY_ENGINE_CONTROL_HELP),
+      option text = STRING_TOKEN(STR_ACTIVE_DISPLAY_ENGINE_ALL)  , value = VFR_APP_ACTIVE_DISPLAY_ENGINE_ALL  , flags = DEFAULT;
+#if FeaturePcdGet(PcdH2OFormBrowserLocalMetroDESupported)
+      option text = STRING_TOKEN(STR_ACTIVE_DISPLAY_ENGINE_METRO), value = VFR_APP_ACTIVE_DISPLAY_ENGINE_METRO, flags = 0;
+#endif
+#if FeaturePcdGet(PcdH2OFormBrowserLocalTextDESupported)
+      option text = STRING_TOKEN(STR_ACTIVE_DISPLAY_ENGINE_TEXT) , value = VFR_APP_ACTIVE_DISPLAY_ENGINE_TEXT , flags = 0;
+#endif
+    endoneof;
+#endif
+  endform;
+
+  form
+    formid = VFR_APP_FORM_NUMERIC_OPCODE, title = STRING_TOKEN(STR_FORM_NUMERIC_OPCODE_TITLE);
+
+      numeric varid   = VfrAppVar.Numeric001,
+              questionid  = 0xF000,
+              prompt  = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_ONE_PROMPT),
+              help    = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_ONE_HELP),
+              flags   = INTERACTIVE,
+              minimum = 0,
+              maximum = 99,
+              step    = 1,
+              default = 1,
+      endnumeric;
+
+      numeric varid   = VfrAppVar.Numeric002,
+              prompt  = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_TWO_PROMPT),
+              help    = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_TWO_HELP),
+              flags   = 0,
+              minimum = 0,
+              maximum = 0xFFFFFFFFFFFFFFFF,
+              step    = 1,
+              default = 1,
+      endnumeric;
+
+      numeric varid   = VfrAppVar.Numeric003,
+              prompt  = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_THREE_PROMPT),
+              help    = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_THREE_HELP),
+              flags   = DISPLAY_UINT_HEX,
+              minimum = 0,
+              maximum = 0xFFFFFFFFFFFFFFFF,
+              step    = 1,
+              default = 1,
+      endnumeric;
+
+
+    numeric varid   = VfrAppVar.Numeric004,
+            prompt  = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_FOUR_PROMPT),
+            help    = STRING_TOKEN(STR_QUESTION_NUMERIC_OPCODE_FOUR_HELP),
+            flags   = READ_ONLY,  // READ_ONLY indicate it's marked with EFI_IFR_FLAG_READ_ONLY
+            minimum = 0,
+            maximum = 0xFF,
+            step    = 1,
+            default = 0xF,
+    endnumeric;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_ONE_OF_OPCODE, title = STRING_TOKEN(STR_FORM_ONE_OF_OPCODE_TITLE);
+
+    oneof
+      varid       = VfrAppVar.OneOf001,
+      questionid  = 0xF001,
+      prompt      = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_ONE_PROMPT),
+      help        = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_ONE_HELP),
+      option text = STRING_TOKEN(STR_DISABLED_TEXT),    value = 0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_ENABLED_TEXT),     value = 1, flags = 0;
+    endoneof;
+
+    oneof
+      varid       = VfrAppVar.OneOf002,
+      prompt      = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_TWO_PROMPT),
+      help        = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_TWO_HELP),
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_TWO_VALUE_ZERO), value = 0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_ENABLED_TEXT)                         , value = 1, flags = 0;
+    endoneof;
+
+    oneof
+      varid       = VfrAppVar.OneOf003,
+      prompt      = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_THREE_PROMPT),
+      help        = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_THREE_HELP),
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_THREE_VALUE_ZERO), value = 0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_ENABLED_TEXT)                           , value = 1, flags = 0;
+    endoneof;
+
+    oneof
+      varid       = VfrAppVar.OneOf004,
+      prompt      = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_PROMPT),
+      help        = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_HELP),
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 0 , flags = DEFAULT;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 1 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 2 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 3 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 4 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 5 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 6 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 7 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 8 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 9 , flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 10, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 11, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 12, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 13, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 14, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 15, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 16, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 17, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 18, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 19, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 20, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 21, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 22, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 23, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 24, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 25, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 26, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 27, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 28, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 29, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 30, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 31, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 32, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 33, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 34, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 35, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 36, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_TWO) , value = 37, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ZERO), value = 38, flags = 0;
+      option text = STRING_TOKEN(STR_QUESTION_ONE_OF_OPCODE_FOUR_VALUE_ONE) , value = 39, flags = 0;
+    endoneof;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_STRING_OPCODE, title = STRING_TOKEN(STR_FORM_STRING_OPCODE_TITLE);
+
+    string    varid    = VfrAppVar.String001,
+              prompt   = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_ONE_PROMPT),
+              help     = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_ONE_HELP),
+              flags    = 0,
+              minsize  = 0,
+              maxsize  = 10,
+    endstring;
+
+    string    varid    = VfrAppVar.String002,
+              prompt   = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_TWO_PROMPT),
+              help     = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_TWO_HELP),
+              flags    = 0,
+              minsize  = 0,
+              maxsize  = 200,
+    endstring;
+
+    string    varid    = VfrAppVar.String003,
+              prompt   = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_THREE_PROMPT),
+              help     = STRING_TOKEN(STR_QUESTION_STRING_OPCODE_THREE_HELP),
+              flags    = 0,
+              minsize  = 6,
+              maxsize  = 10,
+    endstring;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_PASSWORD_OPCODE, title = STRING_TOKEN(STR_FORM_PASSWORD_OPCODE_TITLE);
+
+    password  varid    = VfrAppVar.Password001,
+              prompt   = STRING_TOKEN(STR_QUESTION_PASSWORD_OPCODE_ONE_PROMPT),
+              help     = STRING_TOKEN(STR_QUESTION_PASSWORD_OPCODE_ONE_HELP),
+              minsize  = 6,
+              maxsize  = 20,
+    endpassword;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_ORDERED_LIST_OPCODE, title = STRING_TOKEN(STR_FORM_ORDERED_LIST_OPCODE_TITLE);
+
+    orderedlist
+      varid       = VfrAppVar.Order1,
+      prompt      = STRING_TOKEN(STR_TEST_ORDERED_LIST),
+      help        = STRING_TOKEN(STR_TEST_ORDERED_LIST),
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_ONE)    , value =  1, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TWO)    , value =  2, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_THREE)  , value =  3, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FOUR)   , value =  4, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FIVE)   , value =  5, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SIX)    , value =  6, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SEVEN)  , value =  7, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_EIGHT)  , value =  8, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_NINE)   , value =  9, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TEN)    , value = 10, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_ONE)    , value = 11, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TWO)    , value = 12, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_THREE)  , value = 13, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FOUR)   , value = 14, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FIVE)   , value = 15, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SIX)    , value = 16, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SEVEN)  , value = 17, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_EIGHT)  , value = 18, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_NINE)   , value = 19, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TEN)    , value = 20, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_ONE)    , value = 21, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TWO)    , value = 22, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_THREE)  , value = 23, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FOUR)   , value = 24, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FIVE)   , value = 25, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SIX)    , value = 26, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SEVEN)  , value = 27, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_EIGHT)  , value = 28, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_NINE)   , value = 29, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TEN)    , value = 30, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_ONE)    , value = 31, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_TWO)    , value = 32, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_THREE)  , value = 33, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FOUR)   , value = 34, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_FIVE)   , value = 35, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SIX)    , value = 36, flags = 0;
+      option text = STRING_TOKEN(STR_TEST_ORDERED_LIST_OPTION_SEVEN)  , value = 37, flags = 0;
+    endlist;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_TIME_OPCODE, title = STRING_TOKEN(STR_FORM_TIME_OPCODE_TITLE);
+
+    time
+      hour
+        varid       = Time.Hours,
+        prompt      = STRING_TOKEN(STR_TIME_PROMPT),
+        help        = STRING_TOKEN(STR_TIME_HOUR_HELP),
+        minimum     = 0,
+        maximum     = 23,
+        step        = 1,
+        default     = 0,
+      minute
+        varid       = Time.Minutes,
+        prompt      = STRING_TOKEN(STR_TIME_PROMPT),
+        help        = STRING_TOKEN(STR_TIME_MINUTE_HELP),
+        minimum     = 0,
+        maximum     = 59,
+        step        = 1,
+        default     = 0,
+      second
+        varid       = Time.Seconds,
+        prompt      = STRING_TOKEN(STR_TIME_PROMPT),
+        help        = STRING_TOKEN(STR_TIME_SECOND_HELP),
+        minimum     = 0,
+        maximum     = 59,
+        step        = 1,
+        default     = 0,
+    endtime;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_CHECKBOX_OPCODE,
+    title = STRING_TOKEN(STR_FORM_CHECKBOX_OPCODE_TITLE);
+
+    checkbox
+      varid   = VfrAppVar.Checkbox0001,
+      questionid = 0x1000,
+      prompt  = STRING_TOKEN(STR_FORM_CHECKBOX_OPCODE_TITLE),
+      help    = STRING_TOKEN(STR_FORM_CHECKBOX_OPCODE_HELP),
+      flags   = 0,
+      default = TRUE,
+    endcheckbox;
+  endform;
+
+  form
+    formid = VFR_APP_FORM_FB_FUNC_VFR_REFRESH_INTERVAL,
+    title  = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL);
+
+    text
+      help = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_S_ONE),
+      text = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_S_ONE);
+
+    numeric varid      = VfrAppVar.Numeric005,
+            questionid = VFR_APP_Q_ID_FB_FUNC_VFR_REFRESH_INTERVAL_ONE,
+            prompt     = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_Q_ONE),
+            help       = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_Q_ONE_HELP),
+            flags      = INTERACTIVE,
+            minimum    = 0,
+            maximum    = 255,
+            step       = 1,
+            default    = 0,
+            refresh interval = 1
+    endnumeric;
+
+    text
+      help = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_S_TWO),
+      text = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_S_TWO);
+
+    numeric varid      = VfrAppVar.Numeric006,
+            questionid = VFR_APP_Q_ID_FB_FUNC_VFR_REFRESH_INTERVAL_TWO,
+            prompt     = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_Q_TWO),
+            help       = STRING_TOKEN(STR_FB_FUNC_VFR_REFRESH_INTERVAL_Q_TWO_HELP),
+            flags      = INTERACTIVE,
+            minimum    = 0,
+            maximum    = 255,
+            step       = 1,
+            default    = 0,
+            refresh interval = 3
+    endnumeric;
+  endform;
+
+  form 
+    formid = VFR_NTC_HW,
+    title  = STRING_TOKEN(STR_NTC_HW);
+
+    text
+      help = STRING_TOKEN(STR_NTC_HW_HELP),
+      text = STRING_TOKEN(STR_NTC_HW);
+
+    numeric varid      = VfrAppVar.NTCNumber,
+            questionid = NTC_HW_INTERVAL_NUM1,
+            prompt     = STRING_TOKEN(STR_NTC_HW_NUMBER),
+            help       = STRING_TOKEN(STR_NTC_HW_NUMBER_HELP),
+            flags      = INTERACTIVE,
+            minimum    = 0,
+            maximum    = 255,
+            step       = 1,
+            default    = 0,
+    endnumeric;
+
+    numeric varid      = VfrAppVar.NTCNumber2,
+            questionid = NTC_HW_INTERVAL_NUM2,
+            prompt     = STRING_TOKEN(STR_NTC_HW_NUMBER),
+            help       = STRING_TOKEN(STR_NTC_HW_NUMBER_HELP),
+            flags      = INTERACTIVE,
+            minimum    = 0,
+            maximum    = 255,
+            step       = 1,
+            default    = 0,
+    endnumeric;
+    
+    grayoutif
+      ideqval VfrAppVar.NTCNumber == 0;
+    suppressif
+      ideqval VfrAppVar.NTCNumber2 == 0;
+
+      numeric varid      = VfrAppVar.Operater,
+             questionid = NTC_HW_INTERVAL_OPERATOR,
+             prompt     = STRING_TOKEN(STR_NTC_HW_OPERTAOR),
+             help       = STRING_TOKEN(STR_NTC_HW_OPERTAOR_HELP),
+             flags      = INTERACTIVE,
+             minimum    = 0,
+             maximum    = 3,
+             step       = 1,
+             default    = 0,
+      endnumeric;
+    endif;
+    endif;
+
+    numeric varid      = VfrAppVar.NTCTotal,
+          questionid   = NTC_HW_INTERVAL_TOTAL,
+          prompt       = STRING_TOKEN(STR_NTC_HW_TOTAL),
+          help         = STRING_TOKEN(STR_NTC_HW_TOTAL_HELP),
+          flags        = INTERACTIVE,
+          minimum      = 0,
+          maximum      = 255,
+          step         = 1,
+          default      = 0,
+          refresh interval = 1
+    endnumeric;
+  endform;
+
+
+  #include "SetupPagePanel.hfr"
+  #include "HelpTextPanel.hfr"
+  #include "HotKeyPanel.hfr"
+endformset;

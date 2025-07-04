@@ -1,0 +1,45 @@
+## @file
+#  Course14 File System .inf source code
+#
+#******************************************************************************
+#* Copyright (c) 2024, Insyde Software Corporation. All Rights Reserved.
+#*
+#* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+#* transmit, broadcast, present, recite, release, license or otherwise exploit
+#* any part of this publication in any form, by any means, without the prior
+#* written permission of Insyde Software Corporation.
+#*
+#******************************************************************************
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = FileSys
+  FILE_GUID                      = e3b9e41c-fe50-45ef-bd14-40d45ee7c506
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  FileSys.c
+  FileSys.h
+  
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiLib
+  BaseLib
+  PrintLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiApplicationEntryPoint
+
+[Guids]
+  gEfiFileInfoGuid
+  gEfiFileSystemInfoGuid
+
+[Protocols]
+  gEfiSimpleFileSystemProtocolGuid
+  gEfiShellParametersProtocolGuid
