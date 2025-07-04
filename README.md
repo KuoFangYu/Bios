@@ -1,2 +1,2 @@
 # Bios
-This is the newcomer training assignment.
+These are the newcomer training assignment.
