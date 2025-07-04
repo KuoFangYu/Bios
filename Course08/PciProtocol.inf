@@ -1,0 +1,39 @@
+## @file
+#  Course08-non-driver module driver (Protocol) .inf source code
+#
+#******************************************************************************
+#* Copyright (c) 2024, Insyde Software Corporation. All Rights Reserved.
+#*
+#* You may not reproduce, distribute, publish, display, perform, modify, adapt,
+#* transmit, broadcast, present, recite, release, license or otherwise exploit
+#* any part of this publication in any form, by any means, without the prior
+#* written permission of Insyde Software Corporation.
+#*
+#******************************************************************************
+
+[Defines]
+  INF_VERSION                    = 0x0001001B
+  BASE_NAME                      = PciProtocol
+  FILE_GUID                      = 9a5d50e7-dab8-45f6-a041-390f39c564df
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PciProtocolEntryPoint
+  UNLOAD_IMAGE                   = PciProtocolUnload
+
+[Sources]
+  PciProtocol.c
+  PciProtocol.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  UefiLib
+
+[Protocols]
+  gEfiPciRootBridgeIoProtocolGuid
+  gPciScanProtocolGuid
